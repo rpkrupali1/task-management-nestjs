@@ -48,16 +48,18 @@ export class TasksService {
     if (!found) throw new NotFoundException(`Task with ID "${id}" not found`);
     return found;
   }
-  // getTaskById(id: string): Task {
-  //   // try to get task
-  //   // if not found throw an error (404 not found)
-  //   //otherwise return a task
-  //   const found = this.tasks.find((task) => task.id === id);
-  //   if (!found) {
-  //     throw new NotFoundException(`Task with ID "${id}" not found`);
-  //   }
-  //   return found;
-  // }
+
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    const { title, description } = createTaskDto;
+    const task = this.tasksRepository.create({
+      title,
+      description,
+      status: TaskStatus.OPEN,
+    });
+
+    await this.tasksRepository.save(task);
+    return task;
+  }
 
   // createTask(createTaskDto: CreateTaskDto): Task {
   //   const { title, description } = createTaskDto;
